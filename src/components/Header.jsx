@@ -1,7 +1,7 @@
 function Header(){
     return (
     <header>
-        <h1>Wordle Clone</h1>
+        <h1>Wordle</h1>
     </header>
     );
 }

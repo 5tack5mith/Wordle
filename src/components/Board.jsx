@@ -1,7 +1,10 @@
+import Row from './Row.jsx';
 function Board(){
     return(
-        <div>
-            <p>Game board here</p>
+        <div className="board">
+            {Array(6).fill(null).map((_, index)=>(
+                <Row key={index} />
+            ))}
         </div>
     );
 }
