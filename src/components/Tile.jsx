@@ -1,5 +1,9 @@
-function Tile(){
-    return <div className ="tile"></div>
+function Tile({ letter }){
+    return( 
+    <div className ="tile">
+        {letter}
+    </div>
+    );
 }
 
 export default Tile;
