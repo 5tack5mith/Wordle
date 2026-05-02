@@ -1,13 +1,19 @@
 import Row from './Row';
 
-function Board({ currentGuess }) {
+function Board({ currentGuess, guesses, currentRow }) {
   return (
     <div className="board">
-      <Row guess={currentGuess} />
+      {Array(6).fill().map((_, index) => {
+        if (index < guesses.length) {
+          return <Row key={index} guess={guesses[index]} />;
+        }
 
-      {Array(5).fill().map((_, index) => (
-        <Row key={index} guess="" />
-      ))}
+        if (index === currentRow) {
+          return <Row key={index} guess={currentGuess} />;
+        }
+
+        return <Row key={index} guess="" />;
+      })}
     </div>
   );
 }
