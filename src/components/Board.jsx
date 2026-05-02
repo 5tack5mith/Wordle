@@ -5,7 +5,11 @@ function Board({ currentGuess, guesses, currentRow }) {
     <div className="board">
       {Array(6).fill().map((_, index) => {
         if (index < guesses.length) {
-          return <Row key={index} guess={guesses[index]} />;
+          return <Row 
+            key={index} 
+            guess={guesses[index].word}
+            result={guesses[index].result} 
+          />;
         }
 
         if (index === currentRow) {

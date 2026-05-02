@@ -3,11 +3,13 @@ import Board from './components/Board';
 import Keyboard from './components/Keyboard';
 import './App.css';
 import {useState,useEffect} from'react';
+import checkGuess from './utils/checkGuess';
 
 function App (){
   const [currentGuess,setCurrentGuess] = useState("");
   const [guesses,setGuesses] = useState([]);
   const [currentRow,setCurrentRow] = useState(0);
+  const targetWord="APPLE";
   function handleKeyDown(event) {
     if (/^[a-zA-Z]$/.test(event.key) && currentGuess.length < 5) {
       setCurrentGuess(currentGuess + event.key.toUpperCase());
@@ -15,9 +17,15 @@ function App (){
     if (event.key === "Backspace") {
       setCurrentGuess(currentGuess.slice(0, -1));
     }
-    if(event.key === "Enter" && currentGuess.length === 5){
-      setGuesses([...guesses,currentGuess]);
-      setCurrentRow(currentRow+1);
+    if (event.key === "Enter" && currentGuess.length === 5) {
+      const result = checkGuess(currentGuess, targetWord);
+      setGuesses([...guesses,
+        {
+          word: currentGuess,
+          result: result
+        }
+      ]);
+      setCurrentRow(currentRow + 1);
       setCurrentGuess("");
     }
   }
