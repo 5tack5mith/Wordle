@@ -1,9 +1,13 @@
 import Key from "./Key";
-function KeyRow({letters}){
+function KeyRow({letters,handleInput}){
     return (
         <div className="key-row">
             {letters.map((letter,index)=>(
-                <Key key={index} value={letter}/>
+                <Key
+                key={index}
+                value={letter}
+                handleInput={handleInput}
+                />
             ))}
         </div>
     );

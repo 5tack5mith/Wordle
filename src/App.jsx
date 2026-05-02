@@ -10,25 +10,34 @@ function App (){
   const [guesses,setGuesses] = useState([]);
   const [currentRow,setCurrentRow] = useState(0);
   const targetWord="APPLE";
-  function handleKeyDown(event) {
-    if (/^[a-zA-Z]$/.test(event.key) && currentGuess.length < 5) {
-      setCurrentGuess(currentGuess + event.key.toUpperCase());
-    }
-    if (event.key === "Backspace") {
-      setCurrentGuess(currentGuess.slice(0, -1));
-    }
-    if (event.key === "Enter" && currentGuess.length === 5) {
-      const result = checkGuess(currentGuess, targetWord);
-      setGuesses([...guesses,
-        {
-          word: currentGuess,
-          result: result
-        }
-      ]);
-      setCurrentRow(currentRow + 1);
-      setCurrentGuess("");
-    }
+
+  function handleKeyDown(event){
+    handleInput(event.key);
+  } 
+  function handleInput(key) {
+  if (/^[a-zA-Z]$/.test(key) && currentGuess.length < 5) {
+    setCurrentGuess(prev => prev + key.toUpperCase());
   }
+
+  if (key === "Backspace" || key === "⌫") {
+    setCurrentGuess(prev => prev.slice(0, -1));
+  }
+
+  if ((key === "Enter" || key === "ENTER") && currentGuess.length === 5) {
+    const result = checkGuess(currentGuess, targetWord);
+
+    setGuesses([
+      ...guesses,
+      {
+        word: currentGuess,
+        result: result
+      }
+    ]);
+
+    setCurrentRow(prev => prev + 1);
+    setCurrentGuess("");
+  }
+}
   useEffect(()=>{
     window.addEventListener("keydown",handleKeyDown);
     return ()=>{
@@ -44,7 +53,7 @@ function App (){
         guesses={guesses}
         currentRow={currentRow}  
       />
-      <Keyboard />
+      <Keyboard handleInput={handleInput}/>
     </div>
   );
 }
