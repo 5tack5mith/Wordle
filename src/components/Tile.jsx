@@ -1,9 +1,9 @@
-function Tile({ letter }){
-    return( 
-    <div className ="tile">
-        {letter}
+function Tile({ letter, status }) {
+  return (
+    <div className={`tile ${status || ""}`}>
+      {letter}
     </div>
-    );
+  );
 }
 
-export default Tile;
+export default Tile;    
