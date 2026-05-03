@@ -5,12 +5,12 @@ import './App.css';
 import {useState,useEffect} from'react';
 import checkGuess from './utils/checkGuess';
 import validWords from './data/validWords';
+import targetWords from './data/targetWords';
 
 function App (){
   const [currentGuess,setCurrentGuess] = useState("");
   const [guesses,setGuesses] = useState([]);
   const [currentRow,setCurrentRow] = useState(0);
-  const targetWord="APPLE";
   const [keyboardStatus,setKeyboardStatus]= useState({});
   const statusPriority = {
     absent: 1,
@@ -20,6 +20,9 @@ function App (){
   const [gameOver, setGameOver] = useState(false);
   const [hasWon, setHasWon] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [targetWord, setTargetWord] = useState(
+    targetWords[Math.floor(Math.random() * targetWords.length)]
+  );
 
   function handleKeyDown(event){
     handleInput(event.key);
@@ -94,6 +97,9 @@ function App (){
     setGameOver(false);
     setHasWon(false);
     setErrorMessage("");
+    setTargetWord(
+      targetWords[Math.floor(Math.random() * targetWords.length)]
+    );
   }
 
   return(
