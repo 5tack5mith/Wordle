@@ -1,7 +1,7 @@
-function Key({ value, handleInput }) {
+function Key({ value, handleInput, status }) {
   return (
     <button
-      className="key"
+      className={`key ${status || ""}`}
       onClick={() => handleInput(value)}
     >
       {value}

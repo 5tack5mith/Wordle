@@ -10,34 +10,53 @@ function App (){
   const [guesses,setGuesses] = useState([]);
   const [currentRow,setCurrentRow] = useState(0);
   const targetWord="APPLE";
+  const [keyboardStatus,setKeyboardStatus]= useState({});
+  const statusPriority = {
+    absent: 1,
+    present: 2,
+    correct: 3
+  };
 
   function handleKeyDown(event){
     handleInput(event.key);
   } 
   function handleInput(key) {
-  if (/^[a-zA-Z]$/.test(key) && currentGuess.length < 5) {
-    setCurrentGuess(prev => prev + key.toUpperCase());
+    if (/^[a-zA-Z]$/.test(key) && currentGuess.length < 5) {
+      setCurrentGuess(prev => prev + key.toUpperCase());
+    }
+
+    if (key === "Backspace" || key === "⌫") {
+      setCurrentGuess(prev => prev.slice(0, -1));
+    }
+
+    if ((key === "Enter" || key === "ENTER") && currentGuess.length === 5) {
+      const result = checkGuess(currentGuess, targetWord);
+
+      setGuesses(prev => [
+        ...prev,
+        {
+          word: currentGuess,
+          result: result
+        }
+      ]);
+
+      setCurrentRow(prev => prev + 1);
+      setCurrentGuess("");
+      setKeyboardStatus((prevStatus) => {
+        const updatedStatus = { ...prevStatus };
+
+        for (let i = 0; i < currentGuess.length; i++) {
+          const letter = currentGuess[i];
+          const newStatus = result[i];
+
+          if (!updatedStatus[letter] || statusPriority[newStatus] > statusPriority[updatedStatus[letter]]){
+            updatedStatus[letter] = newStatus;
+          }
+        }
+        return updatedStatus;
+      });
+    }
   }
-
-  if (key === "Backspace" || key === "⌫") {
-    setCurrentGuess(prev => prev.slice(0, -1));
-  }
-
-  if ((key === "Enter" || key === "ENTER") && currentGuess.length === 5) {
-    const result = checkGuess(currentGuess, targetWord);
-
-    setGuesses([
-      ...guesses,
-      {
-        word: currentGuess,
-        result: result
-      }
-    ]);
-
-    setCurrentRow(prev => prev + 1);
-    setCurrentGuess("");
-  }
-}
   useEffect(()=>{
     window.addEventListener("keydown",handleKeyDown);
     return ()=>{
@@ -53,7 +72,10 @@ function App (){
         guesses={guesses}
         currentRow={currentRow}  
       />
-      <Keyboard handleInput={handleInput}/>
+      <Keyboard
+        handleInput={handleInput}
+        keyboardStatus={keyboardStatus}
+      />
     </div>
   );
 }
