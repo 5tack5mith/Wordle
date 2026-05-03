@@ -4,6 +4,7 @@ import Keyboard from './components/Keyboard';
 import './App.css';
 import {useState,useEffect} from'react';
 import checkGuess from './utils/checkGuess';
+import validWords from './data/validWords';
 
 function App (){
   const [currentGuess,setCurrentGuess] = useState("");
@@ -18,6 +19,7 @@ function App (){
   };
   const [gameOver, setGameOver] = useState(false);
   const [hasWon, setHasWon] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   function handleKeyDown(event){
     handleInput(event.key);
@@ -25,14 +27,23 @@ function App (){
   function handleInput(key) {
     if (gameOver) return;
     if (/^[a-zA-Z]$/.test(key) && currentGuess.length < 5) {
+      setErrorMessage("");
       setCurrentGuess(prev => prev + key.toUpperCase());
     }
 
     if (key === "Backspace" || key === "⌫") {
+      setErrorMessage("");
       setCurrentGuess(prev => prev.slice(0, -1));
     }
 
     if ((key === "Enter" || key === "ENTER") && currentGuess.length === 5) {
+      if (!validWords.includes(currentGuess)) {
+        setErrorMessage("Not a valid word!");
+        return;
+      }
+
+      setErrorMessage("");
+
       const result = checkGuess(currentGuess, targetWord);
 
       if (currentGuess === targetWord) {
@@ -82,6 +93,7 @@ function App (){
     setKeyboardStatus({});
     setGameOver(false);
     setHasWon(false);
+    setErrorMessage("");
   }
 
   return(
@@ -100,7 +112,11 @@ function App (){
             </button>
         </div>
       )}
-      
+
+      {errorMessage && (
+        <div className="error-message">{errorMessage}</div>
+      )}
+
       <Board 
         currentGuess ={currentGuess}
         guesses={guesses}
