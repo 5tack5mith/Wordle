@@ -16,11 +16,14 @@ function App (){
     present: 2,
     correct: 3
   };
+  const [gameOver, setGameOver] = useState(false);
+  const [hasWon, setHasWon] = useState(false);
 
   function handleKeyDown(event){
     handleInput(event.key);
   } 
   function handleInput(key) {
+    if (gameOver) return;
     if (/^[a-zA-Z]$/.test(key) && currentGuess.length < 5) {
       setCurrentGuess(prev => prev + key.toUpperCase());
     }
@@ -31,6 +34,14 @@ function App (){
 
     if ((key === "Enter" || key === "ENTER") && currentGuess.length === 5) {
       const result = checkGuess(currentGuess, targetWord);
+
+      if (currentGuess === targetWord) {
+        setHasWon(true);
+        setGameOver(true);
+      }
+      else if(currentRow === 5){
+        setGameOver(true);
+      }
 
       setGuesses(prev => [
         ...prev,
@@ -64,9 +75,32 @@ function App (){
     };
   },[currentGuess]);
 
+  function restartGame() {
+    setCurrentGuess("");
+    setGuesses([]);
+    setCurrentRow(0);
+    setKeyboardStatus({});
+    setGameOver(false);
+    setHasWon(false);
+  }
+
   return(
     <div>
       <Header />
+      {gameOver && (
+        <div className="game-message">
+          {hasWon
+            ? "Congratulations! You guessed the word!"
+            : `Game Over! The word was ${targetWord}`}
+            <button 
+              className="restart-button" 
+              onClick={restartGame}
+            >
+                Play Again
+            </button>
+        </div>
+      )}
+      
       <Board 
         currentGuess ={currentGuess}
         guesses={guesses}

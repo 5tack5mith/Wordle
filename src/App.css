@@ -77,3 +77,22 @@
   background-color: #787c7e;
   color: white;
 }
+
+.game-message {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 20px 0;
+  color: white;
+}
+
+.restart-button {
+  display: block;
+  margin: 15px auto;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
